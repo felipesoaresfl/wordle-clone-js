@@ -1,2 +1,3 @@
-# wordle-clone-busertech
-Clone do jogo Wordle desenvolvido com Javascript.
+# wordle-clone-js
+
+Clone do jogo Wordle desenvolvido com Javascript no Busertech.
