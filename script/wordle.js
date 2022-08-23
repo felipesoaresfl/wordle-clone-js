@@ -1,5 +1,6 @@
 const palavrasValidas = [
   "ARROZ",
+  "ERRAR",
   "VERDE",
   "PENTA",
   "BRASA",
@@ -9,7 +10,7 @@ const palavrasValidas = [
   "CALVO",
   "TROPA",
 ];
-const palavraDoDia = "VERDE";
+const palavraDoDia = "ARROZ";
 
 let fimDeJogo = false;
 let linha = 1;
@@ -117,42 +118,66 @@ function checaResultado(resultado) {
   return;
 }
 
-// const pintarTeclas = (textTales, estado) => {
-//   let teclas = document.querySelectorAll(".tecla");
-//   for (tecla of teclas) {
-//     if (textTales == tecla.textContent) {
-//       if (estado === "todocorreto") {
-//         tecla.classList.add("fullcorrect");
-//       } else if (estado === "correto") {
-//         tecla.classList.add("correct");
-//       } else if (estado === "incorreto") {
-//         tecla.classList.add("incorrect");
-//       }
-//     }
-//   }
-// };
+const pintarTeclas = (textTales, estado) => {
+  let teclas = document.querySelectorAll(".tecla");
+  for (tecla of teclas) {
+    if (textTales == tecla.textContent) {
+      if (estado === "todocorreto") {
+        tecla.classList.add("fullcorrect");
+      } else if (estado === "correto") {
+        tecla.classList.add("correct");
+      } else if (estado === "incorreto") {
+        tecla.classList.add("incorrect");
+      }
+    }
+  }
+};
 
 function validarEntrada() {
-  console.log(resultado);
+  //invalida a entrada
   if (!palavrasValidas.includes(resultado)) {
-    invalidarEntrada();
+    document.getElementById("invalidar").innerHTML = "Palavra inválida";
     return;
   }
-  let posicao = 0;
-  for (letra of palavraDoDia) {
-    let el = document.getElementById(`l${linha}c${posicao + 1}`);
-    if (letra == entrada[posicao]) {
-      el.classList.add("fullcorrect");
-      palavraDoDia.replace(letra, "-");
-      console.log(palavraDoDia);
-    } else if (palavraDoDia.includes(entrada[posicao])) {
-      el.classList.add("correct");
-    } else {
-      el.classList.add("incorrect");
-    }
 
-    posicao++;
+  let palavraDoDiaTeste = palavraDoDia.split("");
+  let estado;
+
+  for (let letra in palavraDoDia) {
+    let posicao = document.getElementById(`l${linha}c${parseInt(letra) + 1}`);
+    if (palavraDoDia[letra] == entrada[letra]) {
+      posicao.classList.add("fullcorrect");
+      estado = "todocorreto";
+      pintarTeclas(entrada[letra], estado);
+      let el = palavraDoDia[letra];
+      palavraDoDiaTeste.splice(palavraDoDiaTeste.indexOf(el), 1);
+    } else if (palavraDoDiaTeste.includes(entrada[letra])) {
+      posicao.classList.add("correct");
+      estado = "correto";
+      pintarTeclas(entrada[letra], estado);
+      palavraDoDiaTeste.splice(parseInt(letra) + 1, 1);
+    } else {
+      posicao.classList.add("incorrect");
+      estado = "incorreto";
+      pintarTeclas(entrada[letra], estado);
+    }
   }
+
+  // let posicao = 0;
+  // for (letra of palavraDoDia) {
+  //   let el = document.getElementById(`l${linha}c${posicao + 1}`);
+  //   if (letra == entrada[posicao]) {
+  //     el.classList.add("fullcorrect");
+  //     palavraDoDia.replace(letra, "-");
+  //     console.log(palavraDoDia);
+  //   } else if (palavraDoDia.includes(entrada[posicao])) {
+  //     el.classList.add("correct");
+  //   } else {
+  //     el.classList.add("incorrect");
+  //   }
+
+  //   posicao++;
+  // }
   checaResultado(resultado);
 
   //verifica se o usuário acabou com as tentativas
@@ -161,15 +186,6 @@ function validarEntrada() {
       `não sabe, não sabe, vai ter que aprender. a palavra era: ${palavraDoDia}`
     );
   }
-}
-
-function invalidarEntrada() {
-  document.getElementById("invalidar").innerHTML = "Palavra inválida";
-
-  // let palavraInvalida = "<p> Palavra inválida </p>";
-  // let $aviso = document.createElement("div");
-  // $aviso.innerHTML = palavraInvalida;
-  // invalidar.appendChild($aviso);
 }
 
 document.body.addEventListener("keydown", ouvinteDeTeclas);
