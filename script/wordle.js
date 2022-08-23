@@ -1,4 +1,14 @@
-const palavrasValidas = ["arroz", "verde", "PENTA", "BRASIL", "amora", "teste"];
+const palavrasValidas = [
+  "ARROZ",
+  "VERDE",
+  "PENTA",
+  "BRASA",
+  "AMORA",
+  "PORCO",
+  "VASCO",
+  "CALVO",
+  "TROPA",
+];
 const palavraDoDia = "VERDE";
 
 let fimDeJogo = false;
@@ -50,9 +60,8 @@ const trataTecla = (tecla) => {
 
   if (char == "ENTER") {
     if (entrada.length == 5) {
-      validarEntrada();
       resultado = gerarPalavra();
-      checaResultado(resultado);
+      validarEntrada();
     }
     return;
   }
@@ -61,6 +70,7 @@ const trataTecla = (tecla) => {
     entrada.pop();
     console.log(entrada);
     apagarLetra();
+    document.getElementById("invalidar").innerHTML = "";
     return;
   }
 
@@ -90,6 +100,7 @@ function exibeLetra(char) {
 }
 
 function gerarPalavra() {
+  console.log(entrada[0] + entrada[1] + entrada[2] + entrada[3] + entrada[4]);
   return entrada[0] + entrada[1] + entrada[2] + entrada[3] + entrada[4];
   // console.log("validar se " + resultado + " é igual " + palavraDoDia);
 }
@@ -106,7 +117,27 @@ function checaResultado(resultado) {
   return;
 }
 
+// const pintarTeclas = (textTales, estado) => {
+//   let teclas = document.querySelectorAll(".tecla");
+//   for (tecla of teclas) {
+//     if (textTales == tecla.textContent) {
+//       if (estado === "todocorreto") {
+//         tecla.classList.add("fullcorrect");
+//       } else if (estado === "correto") {
+//         tecla.classList.add("correct");
+//       } else if (estado === "incorreto") {
+//         tecla.classList.add("incorrect");
+//       }
+//     }
+//   }
+// };
+
 function validarEntrada() {
+  console.log(resultado);
+  if (!palavrasValidas.includes(resultado)) {
+    invalidarEntrada();
+    return;
+  }
   let posicao = 0;
   for (letra of palavraDoDia) {
     let el = document.getElementById(`l${linha}c${posicao + 1}`);
@@ -122,6 +153,7 @@ function validarEntrada() {
 
     posicao++;
   }
+  checaResultado(resultado);
 
   //verifica se o usuário acabou com as tentativas
   if (linha == 6) {
@@ -129,6 +161,15 @@ function validarEntrada() {
       `não sabe, não sabe, vai ter que aprender. a palavra era: ${palavraDoDia}`
     );
   }
+}
+
+function invalidarEntrada() {
+  document.getElementById("invalidar").innerHTML = "Palavra inválida";
+
+  // let palavraInvalida = "<p> Palavra inválida </p>";
+  // let $aviso = document.createElement("div");
+  // $aviso.innerHTML = palavraInvalida;
+  // invalidar.appendChild($aviso);
 }
 
 document.body.addEventListener("keydown", ouvinteDeTeclas);
