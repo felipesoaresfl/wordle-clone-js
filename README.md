@@ -2,4 +2,5 @@
 
 Clone do jogo Wordle desenvolvido no Busertech com Javascript .
 
-##https://felipesoaresfl.github.io/wordle-clone-js/
+##preview page
+https://felipesoaresfl.github.io/wordle-clone-js/
